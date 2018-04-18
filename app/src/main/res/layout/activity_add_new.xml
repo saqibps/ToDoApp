@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:gravity="center"
+    android:paddingRight="10dp"
+    android:paddingLeft="10dp"
+    tools:context=".AddNew">
+
+    <EditText
+        android:id="@+id/todo_et"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Type ToDO here" />
+
+    <Button
+        android:id="@+id/add_todo_bt"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:paddingTop="10dp"
+        android:text="Add"/>
+
+</LinearLayout>

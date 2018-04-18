@@ -1,8 +1,11 @@
 package com.example.saqib.todoapp
 
+import android.content.Intent
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.support.v7.widget.LinearLayoutManager
+import android.view.Menu
+import android.view.MenuItem
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.*
 import kotlinx.android.synthetic.main.activity_main.*
@@ -10,6 +13,7 @@ import kotlinx.android.synthetic.main.activity_main.*
 class MainActivity : AppCompatActivity() {
 
     lateinit var databaseReference:DatabaseReference
+    lateinit var firebaseDatabase: FirebaseDatabase
     lateinit var auth: FirebaseAuth
     lateinit var uid:String
     lateinit var toDoList:ArrayList<ToDoItem>
@@ -22,8 +26,9 @@ class MainActivity : AppCompatActivity() {
 
         auth = FirebaseAuth.getInstance()
         uid = auth.currentUser!!.uid
+//         FirebaseDatabase.getInstance().setPersistenceEnabled(true)
 
-        databaseReference = FirebaseDatabase.getInstance().getReference("ToDoList").child(uid)
+        databaseReference = FirebaseDatabase.getInstance().getReference().child("ToDoList").child(uid)
         toDoList = arrayListOf()
         toDoAdapter = ToDoAdapter(toDoList)
         recycler_view.layoutManager = LinearLayoutManager(this)
@@ -56,5 +61,31 @@ class MainActivity : AppCompatActivity() {
             }
         })
 
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        val inflater = menuInflater
+        inflater.inflate(R.menu.main_menu, menu)
+        return true
+
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem?): Boolean {
+        if (item != null) {
+            when (item.getItemId()) {
+                R.id.signout -> {
+                    auth.signOut()
+                    startActivity(Intent(this,SignUpActivity::class.java) )
+                    finish()
+                    return true
+                }
+                R.id.add -> {
+                    startActivity(Intent(this@MainActivity, AddNew::class.java))
+                    return true
+                }
+                else -> return super.onOptionsItemSelected(item)
+            }
+        }
+        return true
     }
 }
