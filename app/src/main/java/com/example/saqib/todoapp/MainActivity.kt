@@ -1,14 +1,20 @@
 package com.example.saqib.todoapp
 
 import android.content.Intent
+import android.graphics.Rect
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
+import android.support.v7.widget.DefaultItemAnimator
+import android.support.v7.widget.DividerItemDecoration
 import android.support.v7.widget.LinearLayoutManager
 import android.view.Menu
 import android.view.MenuItem
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.*
 import kotlinx.android.synthetic.main.activity_main.*
+import android.support.v7.widget.RecyclerView
+import android.view.View
+
 
 class MainActivity : AppCompatActivity() {
 
@@ -32,6 +38,7 @@ class MainActivity : AppCompatActivity() {
         toDoList = arrayListOf()
         toDoAdapter = ToDoAdapter(toDoList)
         recycler_view.layoutManager = LinearLayoutManager(this)
+        recycler_view.addItemDecoration(VerticalSpaceItemDecoration(48))
         recycler_view.adapter = toDoAdapter
 
 
@@ -87,5 +94,13 @@ class MainActivity : AppCompatActivity() {
             }
         }
         return true
+    }
+
+    inner class VerticalSpaceItemDecoration(private val verticalSpaceHeight: Int) : RecyclerView.ItemDecoration() {
+
+        override fun getItemOffsets(outRect: Rect, view: View, parent: RecyclerView,
+                                    state: RecyclerView.State) {
+            outRect.bottom = verticalSpaceHeight
+        }
     }
 }
