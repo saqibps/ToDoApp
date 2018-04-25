@@ -7,7 +7,7 @@
     android:orientation="vertical"
     app:cardCornerRadius="3dp"
     app:cardElevation="3dp"
-    app:cardBackgroundColor="@android:color/darker_gray"
+    app:cardBackgroundColor="#EFEBE9"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <RelativeLayout
@@ -18,8 +18,9 @@
         android:id="@+id/description_tv"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:maxLines="2"
+        android:maxLines="1"
         tools:text="Sample Text"
+        android:ellipsize="end"
         android:textSize="20sp"
         android:textColor="@android:color/black"
         android:paddingLeft="10dp"/>

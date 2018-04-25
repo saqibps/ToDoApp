@@ -7,19 +7,19 @@ import android.os.Bundle
 import android.support.v7.widget.DefaultItemAnimator
 import android.support.v7.widget.DividerItemDecoration
 import android.support.v7.widget.LinearLayoutManager
-import android.view.Menu
-import android.view.MenuItem
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.*
 import kotlinx.android.synthetic.main.activity_main.*
 import android.support.v7.widget.RecyclerView
-import android.view.View
+import android.util.Log
+import android.view.*
+import android.widget.PopupMenu
+import android.widget.Toast
 
 
 class MainActivity : AppCompatActivity() {
 
     lateinit var databaseReference:DatabaseReference
-    lateinit var firebaseDatabase: FirebaseDatabase
     lateinit var auth: FirebaseAuth
     lateinit var uid:String
     lateinit var toDoList:ArrayList<ToDoItem>
@@ -32,14 +32,37 @@ class MainActivity : AppCompatActivity() {
 
         auth = FirebaseAuth.getInstance()
         uid = auth.currentUser!!.uid
-//         FirebaseDatabase.getInstance().setPersistenceEnabled(true)
 
         databaseReference = FirebaseDatabase.getInstance().getReference().child("ToDoList").child(uid)
         toDoList = arrayListOf()
-        toDoAdapter = ToDoAdapter(toDoList)
+        toDoAdapter = ToDoAdapter(toDoList) {toDoItem ->
+            val popupMenu = PopupMenu(this,recycler_view.getChildAt(toDoList.indexOf(toDoItem)))
+            popupMenu.inflate(R.menu.item_menu)
+            popupMenu.setOnMenuItemClickListener { item: MenuItem? ->
+                if (item != null) {
+                    when(item.itemId){
+                        R.id.edit -> {
+                            val intent:Intent = Intent(this ,AddNew::class.java)
+                            intent.putExtra("key",toDoItem.key)
+                            intent.putExtra("desc",toDoItem.desc)
+                            startActivity(intent)
+                             true
+                        }
+                        R.id.delete -> {
+                            databaseReference.child(toDoItem.key).removeValue()
+                             true
+                        }
+                        else ->  false
+                    }
+                }
+                 true
+            }
+            popupMenu.show()
+        }
         recycler_view.layoutManager = LinearLayoutManager(this)
         recycler_view.addItemDecoration(VerticalSpaceItemDecoration(48))
         recycler_view.adapter = toDoAdapter
+
 
 
         databaseReference.addChildEventListener(object :ChildEventListener{
@@ -103,4 +126,5 @@ class MainActivity : AppCompatActivity() {
             outRect.bottom = verticalSpaceHeight
         }
     }
+
 }
