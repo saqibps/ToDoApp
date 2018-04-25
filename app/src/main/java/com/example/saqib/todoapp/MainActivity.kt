@@ -1,9 +1,11 @@
 package com.example.saqib.todoapp
 
+import android.content.DialogInterface
 import android.content.Intent
 import android.graphics.Rect
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
+import android.support.v7.app.AlertDialog
 import android.support.v7.widget.DefaultItemAnimator
 import android.support.v7.widget.DividerItemDecoration
 import android.support.v7.widget.LinearLayoutManager
@@ -49,8 +51,13 @@ class MainActivity : AppCompatActivity() {
                              true
                         }
                         R.id.delete -> {
-                            databaseReference.child(toDoItem.key).removeValue()
-                             true
+                            AlertDialog.Builder(this).setMessage("Are you sure You want to delete this item?")
+                                    .setNegativeButton("No",null)
+                                    .setPositiveButton("Yes", { dialogInterface, i ->
+                                        databaseReference.child(toDoItem.key).removeValue()
+                                        true
+                                    }).show()
+
                         }
                         else ->  false
                     }
@@ -112,10 +119,16 @@ class MainActivity : AppCompatActivity() {
         if (item != null) {
             when (item.getItemId()) {
                 R.id.signout -> {
-                    auth.signOut()
+                    val alertDialog:AlertDialog.Builder = AlertDialog.Builder(this)
+                    alertDialog.setTitle("SignOut").setMessage("Are You Sure..??").setNegativeButton("No",null)
+                            .setPositiveButton("Yes", { dialogInterface, i ->
+                                auth.signOut()
                     startActivity(Intent(this,SignUpActivity::class.java) )
                     finish()
-                    return true
+                                true
+                            }).show()
+
+//
                 }
                 R.id.add -> {
                     startActivity(Intent(this@MainActivity, AddNew::class.java))
