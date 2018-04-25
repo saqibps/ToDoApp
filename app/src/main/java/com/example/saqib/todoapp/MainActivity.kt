@@ -70,7 +70,15 @@ class MainActivity : AppCompatActivity() {
 
             override fun onChildMoved(p0: DataSnapshot?, p1: String?) {}
 
-            override fun onChildChanged(p0: DataSnapshot?, p1: String?) {}
+            override fun onChildChanged(snapshot: DataSnapshot, p1: String?) {
+                if  (snapshot != null) {
+                    val toDoItem:ToDoItem = snapshot.getValue(ToDoItem::class.java)!!
+                    if (toDoList.contains(toDoItem)) {
+                    toDoList.set(toDoList.indexOf(toDoItem),toDoItem)
+                        toDoAdapter.notifyDataSetChanged()
+                    }
+                }
+            }
 
             override fun onChildAdded(snapshot: DataSnapshot, p1: String?) {
                 if (snapshot != null) {
